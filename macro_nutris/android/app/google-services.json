@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "747513263604",
+    "firebase_url": "https://macronutris-default-rtdb.firebaseio.com",
+    "project_id": "macronutris",
+    "storage_bucket": "macronutris.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747513263604:android:eaddba4f549ad8009c35a1",
+        "android_client_info": {
+          "package_name": "com.example.macro_nutris"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "747513263604-qc5u7d691551miignp7lmmjntd8t7dum.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_JIIOv-Da6dGOfrPMBUyJU6_tFIrZExw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "747513263604-qc5u7d691551miignp7lmmjntd8t7dum.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
