@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:macro_nutris/widgets/Home_page.dart';
 import 'package:macro_nutris/widgets/login.dart';
 
 class Checagem_page extends StatefulWidget {
@@ -18,7 +19,8 @@ class _Checagem_pageState extends State<Checagem_page> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const Login()));
       } else {
-        print('User is signed in!');
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
       }
     });
   }
