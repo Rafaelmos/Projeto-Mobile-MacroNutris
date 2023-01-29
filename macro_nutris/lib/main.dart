@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:macro_nutris/widgets/Checagem_page.dart';
 import 'package:macro_nutris/widgets/login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Tela de Login',
       theme: ThemeData(primaryColor: Colors.blue),
-      home: const Login(),
+      home: const Checagem_page(),
     );
   }
 }

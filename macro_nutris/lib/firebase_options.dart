@@ -70,7 +70,8 @@ class DefaultFirebaseOptions {
     projectId: 'macronutris',
     databaseURL: 'https://macronutris-default-rtdb.firebaseio.com',
     storageBucket: 'macronutris.appspot.com',
-    iosClientId: '747513263604-ckj7kbrloiv8i8ipvsdf1vcfnutdonjn.apps.googleusercontent.com',
+    iosClientId:
+        '747513263604-ckj7kbrloiv8i8ipvsdf1vcfnutdonjn.apps.googleusercontent.com',
     iosBundleId: 'com.example.macroNutris',
   );
 
@@ -81,7 +82,8 @@ class DefaultFirebaseOptions {
     projectId: 'macronutris',
     databaseURL: 'https://macronutris-default-rtdb.firebaseio.com',
     storageBucket: 'macronutris.appspot.com',
-    iosClientId: '747513263604-ckj7kbrloiv8i8ipvsdf1vcfnutdonjn.apps.googleusercontent.com',
+    iosClientId:
+        '747513263604-ckj7kbrloiv8i8ipvsdf1vcfnutdonjn.apps.googleusercontent.com',
     iosBundleId: 'com.example.macroNutris',
   );
 }
