@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:macro_nutris/widgets/Home_page.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -8,6 +10,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _emailController = TextEditingController();
+  final _senhaController = TextEditingController();
+  final _firebaseAuth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +30,8 @@ class _LoginState extends State<Login> {
                 height: 128,
                 child: Image.asset("assets/logo.png"),
               ),
-              const TextField(
+              TextFormField(
+                controller: _emailController,
                 autofocus: true,
                 keyboardType: TextInputType.text,
                 keyboardAppearance: Brightness.dark,
@@ -37,10 +44,11 @@ class _LoginState extends State<Login> {
                   alignLabelWithHint: true,
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               ),
-              const TextField(
+              TextFormField(
+                  controller: _senhaController,
                   autofocus: true,
                   obscureText: true,
                   keyboardType: TextInputType.text,
@@ -60,8 +68,7 @@ class _LoginState extends State<Login> {
                 height: 60,
                 child: MaterialButton(
                   onPressed: () {
-                    print("click");
-                    /*É NO ONPRESSED QUE COLOCAMOS O EVENTO PARA O LOGIN, OU SEJA, VAMOS RELACIONAR O AUTENTICAR DO FIREBASE POR AQUI DE ALGUMA FORMA*/
+                    login();
                   },
                   shape: new RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(30)),
@@ -75,5 +82,35 @@ class _LoginState extends State<Login> {
             ],
           )),
         ));
+  }
+
+  login() async {
+    try {
+      UserCredential usuarioCredenciado =
+          await _firebaseAuth.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _senhaController.text,
+      );
+      if (usuarioCredenciado != null) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Usuário não encontrado'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      } else if (e.code == 'wrong.passaword') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Senha incorreta'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    }
   }
 }
