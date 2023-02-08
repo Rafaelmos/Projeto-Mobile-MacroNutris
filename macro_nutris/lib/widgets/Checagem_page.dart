@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
@@ -11,10 +12,13 @@ class Checagem_page extends StatefulWidget {
 }
 
 class _Checagem_pageState extends State<Checagem_page> {
+  StreamSubscription? streamSubscription;
+
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    streamSubscription =
+        FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => const Login()));
@@ -23,6 +27,12 @@ class _Checagem_pageState extends State<Checagem_page> {
             context, MaterialPageRoute(builder: (context) => const HomePage()));
       }
     });
+  }
+
+  @override
+  void dispose() {
+    streamSubscription!.cancel();
+    super.dispose(); 
   }
 
   @override
