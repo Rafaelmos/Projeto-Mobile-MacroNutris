@@ -70,6 +70,14 @@ class _LoginState extends State<Login> {
                     labelStyle: TextStyle(color: Colors.black),
                     alignLabelWithHint: true,
                   )),
+
+              TextButton(
+                child: const Text('ESQUECI A SENHA'),
+                onPressed: () {
+                  print('Botão para recuperar senha');
+                },
+              ),
+              
               const SizedBox(
                 height: 20,
               ),
@@ -89,6 +97,15 @@ class _LoginState extends State<Login> {
                   ),
                   color: Color.fromARGB(255, 224, 176, 255),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              TextButton(
+                child: const Text('CRIAR NOVA CONTA'),
+                onPressed: () {
+                  print('Botão para cadastrar');
+                },
               )
             ],
           )),
