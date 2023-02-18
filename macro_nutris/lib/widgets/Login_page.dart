@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
+import 'Cadastro_page.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -70,14 +71,15 @@ class _LoginState extends State<Login> {
                     labelStyle: TextStyle(color: Colors.black),
                     alignLabelWithHint: true,
                   )),
-
               TextButton(
-                child: const Text('ESQUECI A SENHA'),
+                child: const Text(
+                  'ESQUECI A SENHA',
+                  style: TextStyle(fontSize: 10),
+                ),
                 onPressed: () {
                   print('Botão para recuperar senha');
                 },
               ),
-              
               const SizedBox(
                 height: 20,
               ),
@@ -89,22 +91,27 @@ class _LoginState extends State<Login> {
                     //print(_emailController.text);
                     //print(_passwordController.text);
                   },
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(30)),
-                  child: Text(
-                    "Entrar",
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  color: const Color.fromARGB(255, 224, 176, 255),
+                  child: const Text( "Entrar",
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
-                  color: Color.fromARGB(255, 224, 176, 255),
                 ),
               ),
               const SizedBox(
                 height: 20,
               ),
               TextButton(
-                child: const Text('CRIAR NOVA CONTA'),
+                child: const Text(
+                  'CRIAR NOVA CONTA',
+                  style: TextStyle(fontSize: 10),
+                ),
                 onPressed: () {
-                  print('Botão para cadastrar');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CadastroPage()),
+                  );
                 },
               )
             ],
