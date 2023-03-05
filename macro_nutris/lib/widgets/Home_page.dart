@@ -55,11 +55,6 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          //  Text(
-          //    'Data selecionada: ${dataSelecionada?.toString() ?? "Nenhuma data selecionada"}',
-          //    textAlign: TextAlign.center,
-          //  ),
-          Text(nome, textAlign: TextAlign.center),
           const SizedBox(height: 20),
         ],
       ),
