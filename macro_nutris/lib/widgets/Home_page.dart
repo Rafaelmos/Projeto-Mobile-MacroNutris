@@ -15,6 +15,11 @@ class _HomePageState extends State<HomePage> {
   String email = '';
 
   @override
+  void initState() {
+    pegar_Usuario();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
@@ -40,11 +45,21 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: const [],
+        children: [Text(nome, textAlign: TextAlign.center)],
       ),
     );
   }
-  
+
+  pegar_Usuario() async {
+    User? usuario = await _firebaseAuth.currentUser;
+    if (usuario != null) {
+      setState(() {
+        nome = usuario.displayName!;
+        email = usuario.email!;
+      });
+    }
+  }
+
   sair() async {
     await _firebaseAuth.signOut().then(
           (user) => Navigator.pushReplacement(
