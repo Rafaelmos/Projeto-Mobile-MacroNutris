@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macro_nutris/widgets/Checagem_page.dart';
+import 'package:macro_nutris/widgets/ObjetoRefeicao.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,37 +10,15 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class Alimentos {
-  String tipo; //cafe, almoco, janta, outro
-  DateTime data;
-  String nome;
-  double gramasMl;
-  double kcal;
-  double carboidratos;
-  double proteina;
-  double gordura;
-
-  Alimentos({
-    required this.tipo,
-    required this.data,
-    required this.nome,
-    required this.gramasMl,
-    required this.kcal,
-    required this.carboidratos,
-    required this.proteina,
-    required this.gordura,
-  });
-}
-
 class _HomePageState extends State<HomePage> {
   final _firebaseAuth = FirebaseAuth.instance;
   String nome = '';
   String email = '';
   DateTime dataSelecionada = DateTime.now();
-  List<Alimentos> listaCafe = [];
-  List<Alimentos> listaAlmoco = [];
-  List<Alimentos> listaJantar = [];
-  List<Alimentos> listaOutros = [];
+  List<Refeicao> listaCafe = [];
+  List<Refeicao> listaAlmoco = [];
+  List<Refeicao> listaJantar = [];
+  List<Refeicao> listaOutros = [];
   TextEditingController _nomeController = TextEditingController();
   TextEditingController _gramasMlController = TextEditingController();
   TextEditingController _kcalController = TextEditingController();
@@ -78,8 +57,11 @@ class _HomePageState extends State<HomePage> {
       ),
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-            DateFormat('dd/MM/yyyy').format(dataSelecionada ?? DateTime.now())),
+        title: GestureDetector(
+          onTap: () => selecionarData(),
+          child: Text(DateFormat('dd/MM/yyyy')
+              .format(dataSelecionada ?? DateTime.now())),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.calendar_today),
@@ -121,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Novo alimento'),
+                          title: const Text('Nova Refeição'),
                           content: SingleChildScrollView(
                             child: Form(
                               child: Column(
@@ -195,20 +177,15 @@ class _HomePageState extends State<HomePage> {
                           actions: [
                             ElevatedButton(
                               onPressed: () {
-                                Alimentos novaRefeicao = Alimentos(
-                                  tipo: selectedList,
-                                  data: dataSelecionada,
-                                  nome: _nomeController.text,
-                                  gramasMl:
-                                      double.parse(_gramasMlController.text),
-                                  kcal: double.parse(_kcalController.text),
-                                  carboidratos: double.parse(
-                                      _carboidratosController.text),
-                                  proteina:
-                                      double.parse(_proteinaController.text),
-                                  gordura:
-                                      double.parse(_gorduraController.text),
-                                );
+                                Refeicao novaRefeicao = Refeicao.novaRefeicao(
+                                    selectedList,
+                                    dataSelecionada,
+                                    _nomeController.text,
+                                    double.parse(_gramasMlController.text),
+                                    double.parse(_kcalController.text),
+                                    double.parse(_carboidratosController.text),
+                                    double.parse(_proteinaController.text),
+                                    double.parse(_gorduraController.text));
                                 switch (selectedList) {
                                   case 'Cafe':
                                     setState(() {
@@ -258,12 +235,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> _buildList(List<Alimentos> lista) {
+  List<Widget> _buildList(List<Refeicao> lista) {
     return lista
-        .map((alimento) => ListTile(
-              title: Text(alimento.nome),
+        .map((refeicao) => ListTile(
+              title: Text(refeicao.nome),
               trailing:
-                  Text('${alimento.gramasMl} g/mL - ${alimento.kcal} kcal'),
+                  Text('${refeicao.gramasMl} g/mL - ${refeicao.kcal} kcal'),
+            //---------------------------------------------
+            //
+            //
+            //COLOCAR BOTAO DE EXCLUIR E ALTERAR.
+            //
+            //
+            //
+            //
+            //---------------------------------------------
             ))
         .toList();
   }
