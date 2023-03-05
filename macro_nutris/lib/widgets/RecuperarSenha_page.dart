@@ -21,7 +21,7 @@ void checkFirebaseConnection() {
 
 class _ResetScreenState extends State<ResetScreen> {
   String _email = '';
-  String _passwaord = '';
+  final _emailController = TextEditingController();
   final _firebaseAuth = FirebaseAuth.instance;
 
   @override
@@ -39,17 +39,8 @@ class _ResetScreenState extends State<ResetScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                autofocus: true,
-                keyboardType: TextInputType.text,
-                keyboardAppearance: Brightness.dark,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black, fontSize: 20),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Email",
-                  labelStyle: TextStyle(color: Colors.black),
-                  alignLabelWithHint: true,
-                ),
+                controller: _emailController,
+                decoration: const InputDecoration(label: Text('Email')),
               ),
               SizedBox(
                 height: 10,
@@ -61,6 +52,8 @@ class _ResetScreenState extends State<ResetScreen> {
                 height: 60,
                 child: MaterialButton(
                   onPressed: () {
+                    _email = _emailController.text;
+                    print(_email);
                     _firebaseAuth.sendPasswordResetEmail(email: _email);
                     Navigator.of(context).pop();
                   },
