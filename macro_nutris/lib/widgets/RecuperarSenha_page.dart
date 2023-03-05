@@ -20,13 +20,16 @@ void checkFirebaseConnection() {
 }
 
 class _ResetScreenState extends State<ResetScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  String _email = '';
+  String _passwaord = '';
   final _firebaseAuth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: const Text('Recuperar senha'),
+        ),
         backgroundColor: const Color.fromARGB(255, 247, 238, 253),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
@@ -36,7 +39,6 @@ class _ResetScreenState extends State<ResetScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                controller: _emailController,
                 autofocus: true,
                 keyboardType: TextInputType.text,
                 keyboardAppearance: Brightness.dark,
@@ -44,36 +46,13 @@ class _ResetScreenState extends State<ResetScreen> {
                 style: TextStyle(color: Colors.black, fontSize: 20),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: "Usuário",
+                  hintText: "Email",
                   labelStyle: TextStyle(color: Colors.black),
                   alignLabelWithHint: true,
                 ),
               ),
               SizedBox(
                 height: 10,
-              ),
-              TextFormField(
-                  controller: _passwordController,
-                  autofocus: true,
-                  obscureText: true,
-                  keyboardType: TextInputType.text,
-                  keyboardAppearance: Brightness.dark,
-                  style: TextStyle(color: Colors.black, fontSize: 20),
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: "Senha do usuário",
-                    labelStyle: TextStyle(color: Colors.black),
-                    alignLabelWithHint: true,
-                  )),
-              TextButton(
-                child: const Text(
-                  'ESQUECI A SENHA',
-                  style: TextStyle(fontSize: 10),
-                ),
-                onPressed: () {
-                  print("Resert senha");
-                },
               ),
               const SizedBox(
                 height: 20,
@@ -82,68 +61,20 @@ class _ResetScreenState extends State<ResetScreen> {
                 height: 60,
                 child: MaterialButton(
                   onPressed: () {
-                    login();
-                    //print(_emailController.text);
-                    //print(_passwordController.text);
+                    _firebaseAuth.sendPasswordResetEmail(email: _email);
+                    Navigator.of(context).pop();
                   },
+                  color: const Color.fromARGB(255, 224, 176, 255),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
-                  color: const Color.fromARGB(255, 224, 176, 255),
                   child: const Text(
-                    "Entrar",
+                    'Enviar Solicitação',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              TextButton(
-                child: const Text(
-                  'CRIAR NOVA CONTA',
-                  style: TextStyle(fontSize: 10),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CadastroPage()),
-                  );
-                },
-              )
             ],
           )),
         ));
-  }
-
-  login() async {
-    try {
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      if (userCredential != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomePage()),
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Senha incorreta'),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
-      } else if (e.code == 'user-not-found') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Usuário não encontrado'),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
-      }
-    }
   }
 }

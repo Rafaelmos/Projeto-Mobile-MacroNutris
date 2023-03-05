@@ -19,7 +19,7 @@ class _CadastroPageState extends State<CadastroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Cadastro Page'),
+          title: const Text('Cadastrar'),
         ),
         backgroundColor: const Color.fromARGB(255, 247, 238, 253),
         body: Padding(
