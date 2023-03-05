@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
+import 'package:macro_nutris/widgets/RecuperarSenha_page.dart';
 import 'Cadastro_page.dart';
 
 class Login extends StatefulWidget {
@@ -76,9 +77,8 @@ class _LoginState extends State<Login> {
                   'ESQUECI A SENHA',
                   style: TextStyle(fontSize: 10),
                 ),
-                onPressed: () {
-                  print('Botão para recuperar senha');
-                },
+                onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ResetScreen())),
               ),
               const SizedBox(
                 height: 20,
