@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:macro_nutris/widgets/Checagem_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,6 +14,7 @@ class _HomePageState extends State<HomePage> {
   final _firebaseAuth = FirebaseAuth.instance;
   String nome = '';
   String email = '';
+  DateTime? dataSelecionada;
 
   @override
   void initState() {
@@ -40,12 +42,26 @@ class _HomePageState extends State<HomePage> {
       ),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Home'),
+        title: Text(
+            '${DateFormat('dd/MM/yyyy').format(dataSelecionada ?? DateTime.now())}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_today),
+            onPressed: () => selecionarData(),
+          ),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [Text(nome, textAlign: TextAlign.center)],
+        children: [
+          //  Text(
+          //    'Data selecionada: ${dataSelecionada?.toString() ?? "Nenhuma data selecionada"}',
+          //    textAlign: TextAlign.center,
+          //  ),
+          Text(nome, textAlign: TextAlign.center),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }
@@ -69,5 +85,20 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         );
+  }
+
+  Future<void> selecionarData() async {
+    final dataSelecionada = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2030),
+    );
+
+    if (dataSelecionada != null) {
+      setState(() {
+        this.dataSelecionada = dataSelecionada;
+      });
+    }
   }
 }
