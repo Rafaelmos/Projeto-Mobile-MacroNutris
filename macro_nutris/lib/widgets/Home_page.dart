@@ -1,17 +1,21 @@
+import 'dart:js_util';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macro_nutris/widgets/Checagem_page.dart';
 import 'package:macro_nutris/widgets/ObjetoRefeicao.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final _firebaseAuth = FirebaseAuth.instance;
+  FirebaseDatabase database = FirebaseDatabase.instance;
   String nome = '';
   String email = '';
   DateTime dataSelecionada = DateTime.now();
@@ -190,21 +194,25 @@ class _HomePageState extends State<HomePage> {
                                   case 'Cafe':
                                     setState(() {
                                       listaCafe.add(novaRefeicao);
+                                      addRefeicaoBD(novaRefeicao);
                                     });
                                     break;
                                   case 'Almoco':
                                     setState(() {
                                       listaAlmoco.add(novaRefeicao);
+                                      addRefeicaoBD(novaRefeicao);
                                     });
                                     break;
                                   case 'Jantar':
                                     setState(() {
                                       listaJantar.add(novaRefeicao);
+                                      addRefeicaoBD(novaRefeicao);
                                     });
                                     break;
                                   case 'Outros':
                                     setState(() {
                                       listaOutros.add(novaRefeicao);
+                                      addRefeicaoBD(novaRefeicao);
                                     });
                                     break;
                                   default:
@@ -239,17 +247,34 @@ class _HomePageState extends State<HomePage> {
     return lista
         .map((refeicao) => ListTile(
               title: Text(refeicao.nome),
-              trailing:
+              trailing: Container(
+                width: 70,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          setState(() {
+                            lista.remove(refeicao);
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: IconButton(
+                        icon: Icon(Icons.edit, color: Colors.blue),
+                        onPressed: () {
+                          // Navegar para a tela de edição
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle:
                   Text('${refeicao.gramasMl} g/mL - ${refeicao.kcal} kcal'),
-            //---------------------------------------------
-            //
-            //
-            //COLOCAR BOTAO DE EXCLUIR E ALTERAR.
-            //
-            //
-            //
-            //
-            //---------------------------------------------
             ))
         .toList();
   }
@@ -288,5 +313,29 @@ class _HomePageState extends State<HomePage> {
         this.dataSelecionada = dataSelecionada;
       });
     }
+  }
+
+  void addRefeicaoBD(Refeicao refeicao) {
+    /**final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return;
+    }
+    final database = FirebaseDatabase.instance.reference();
+    final refeicaoRef =
+        database.child('users').child(user.uid).child('refeicoes').push();
+
+    Map<String, dynamic> novaRefeicao = {
+      'tipo': refeicao.tipo.toString(),
+      'date': refeicao.data.toIso8601String(),
+      'nome': refeicao.nome.toString(),
+      'gramasMl': refeicao.gramasMl,
+      'kcal': refeicao.kcal,
+      'carboidratos': refeicao.carboidratos,
+      'proteina': refeicao.proteina,
+      'gordura': refeicao.gordura,
+    };
+
+    refeicaoRef.set(novaRefeicao);
+    */
   }
 }
