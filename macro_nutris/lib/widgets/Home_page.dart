@@ -1,11 +1,11 @@
 import 'dart:js_util';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:macro_nutris/widgets/Checagem_page.dart';
 import 'package:macro_nutris/widgets/ObjetoRefeicao.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _firebaseAuth = FirebaseAuth.instance;
-  FirebaseDatabase database = FirebaseDatabase.instance;
+
   String nome = '';
   String email = '';
   DateTime dataSelecionada = DateTime.now();
@@ -30,8 +30,11 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _proteinaController = TextEditingController();
   TextEditingController _gorduraController = TextEditingController();
 
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
   @override
   void initState() {
+    //refresh();
     super.initState();
     listaCafe = [];
     listaAlmoco = [];
@@ -181,6 +184,7 @@ class _HomePageState extends State<HomePage> {
                           actions: [
                             ElevatedButton(
                               onPressed: () {
+                                senData(selectedList);
                                 Refeicao novaRefeicao = Refeicao.novaRefeicao(
                                     selectedList,
                                     dataSelecionada,
@@ -313,6 +317,22 @@ class _HomePageState extends State<HomePage> {
         this.dataSelecionada = dataSelecionada;
       });
     }
+  }
+
+  void refresh() async {}
+
+  void senData(tipo) {
+    String id = Uuid().v1();
+    db.collection("refeicao").doc(id).set({
+      "tipo": tipo,
+      "data": dataSelecionada,
+      "name": _nomeController.text,
+      "gramas": double.parse(_gramasMlController.text),
+      "calorias": double.parse(_kcalController.text),
+      "carboidratos": double.parse(_carboidratosController.text),
+      "proteina": double.parse(_proteinaController.text),
+      "gordura": double.parse(_gorduraController.text),
+    });
   }
 
   void addRefeicaoBD(Refeicao refeicao) {
