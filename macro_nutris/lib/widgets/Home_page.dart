@@ -1,4 +1,3 @@
-import 'dart:js_util';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,10 +14,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _firebaseAuth = FirebaseAuth.instance;
-
   String nome = '';
   String email = '';
-  DateTime dataSelecionada = DateTime.now();
+  DateTime dataSelecionada =
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  List<Refeicao> refeicoes = [];
   List<Refeicao> listaCafe = [];
   List<Refeicao> listaAlmoco = [];
   List<Refeicao> listaJantar = [];
@@ -29,18 +29,17 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _carboidratosController = TextEditingController();
   TextEditingController _proteinaController = TextEditingController();
   TextEditingController _gorduraController = TextEditingController();
-
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
   void initState() {
-    //refresh();
     super.initState();
+    buscarRefeicoes();
     listaCafe = [];
     listaAlmoco = [];
     listaJantar = [];
     listaOutros = [];
-    pegar_Usuario();
+    exibirUsuario();
   }
 
   @override
@@ -66,8 +65,7 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: GestureDetector(
           onTap: () => selecionarData(),
-          child: Text(DateFormat('dd/MM/yyyy')
-              .format(dataSelecionada ?? DateTime.now())),
+          child: Text(DateFormat('dd/MM/yyyy').format(dataSelecionada)),
         ),
         actions: [
           IconButton(
@@ -184,44 +182,7 @@ class _HomePageState extends State<HomePage> {
                           actions: [
                             ElevatedButton(
                               onPressed: () {
-                                senData(selectedList);
-                                Refeicao novaRefeicao = Refeicao.novaRefeicao(
-                                    selectedList,
-                                    dataSelecionada,
-                                    _nomeController.text,
-                                    double.parse(_gramasMlController.text),
-                                    double.parse(_kcalController.text),
-                                    double.parse(_carboidratosController.text),
-                                    double.parse(_proteinaController.text),
-                                    double.parse(_gorduraController.text));
-                                switch (selectedList) {
-                                  case 'Cafe':
-                                    setState(() {
-                                      listaCafe.add(novaRefeicao);
-                                      addRefeicaoBD(novaRefeicao);
-                                    });
-                                    break;
-                                  case 'Almoco':
-                                    setState(() {
-                                      listaAlmoco.add(novaRefeicao);
-                                      addRefeicaoBD(novaRefeicao);
-                                    });
-                                    break;
-                                  case 'Jantar':
-                                    setState(() {
-                                      listaJantar.add(novaRefeicao);
-                                      addRefeicaoBD(novaRefeicao);
-                                    });
-                                    break;
-                                  case 'Outros':
-                                    setState(() {
-                                      listaOutros.add(novaRefeicao);
-                                      addRefeicaoBD(novaRefeicao);
-                                    });
-                                    break;
-                                  default:
-                                    break;
-                                }
+                                addRefeicaoBD(selectedList);
                                 Navigator.of(context).pop();
                               },
                               child: const Text('Adicionar'),
@@ -261,6 +222,7 @@ class _HomePageState extends State<HomePage> {
                         icon: Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           setState(() {
+                            removerRefeicaoBD(refeicao);
                             lista.remove(refeicao);
                           });
                         },
@@ -283,8 +245,8 @@ class _HomePageState extends State<HomePage> {
         .toList();
   }
 
-  pegar_Usuario() async {
-    User? usuario = await _firebaseAuth.currentUser;
+  exibirUsuario() async {
+    User? usuario = getUser();
     if (usuario != null) {
       setState(() {
         nome = usuario.displayName!;
@@ -307,55 +269,96 @@ class _HomePageState extends State<HomePage> {
   Future<void> selecionarData() async {
     final dataSelecionada = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day),
       firstDate: DateTime(2022),
       lastDate: DateTime(2030),
     );
-
     if (dataSelecionada != null) {
       setState(() {
         this.dataSelecionada = dataSelecionada;
       });
     }
+    buscarRefeicoes();
   }
 
-  void refresh() async {}
-
-  void senData(tipo) {
-    String id = Uuid().v1();
-    db.collection("refeicao").doc(id).set({
-      "tipo": tipo,
-      "data": dataSelecionada,
-      "name": _nomeController.text,
-      "gramas": double.parse(_gramasMlController.text),
-      "calorias": double.parse(_kcalController.text),
-      "carboidratos": double.parse(_carboidratosController.text),
-      "proteina": double.parse(_proteinaController.text),
-      "gordura": double.parse(_gorduraController.text),
-    });
-  }
-
-  void addRefeicaoBD(Refeicao refeicao) {
-    /**final User? user = FirebaseAuth.instance.currentUser;
+  User? getUser() {
+    final User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      return;
+      return null;
     }
-    final database = FirebaseDatabase.instance.reference();
-    final refeicaoRef =
-        database.child('users').child(user.uid).child('refeicoes').push();
+    return user;
+  }
 
-    Map<String, dynamic> novaRefeicao = {
-      'tipo': refeicao.tipo.toString(),
-      'date': refeicao.data.toIso8601String(),
-      'nome': refeicao.nome.toString(),
-      'gramasMl': refeicao.gramasMl,
-      'kcal': refeicao.kcal,
-      'carboidratos': refeicao.carboidratos,
-      'proteina': refeicao.proteina,
-      'gordura': refeicao.gordura,
-    };
+  void addRefeicaoBD(selectedList) {
+    String id = Uuid().v1();
+    Refeicao novaRefeicao = Refeicao.novaRefeicao(
+        id,
+        selectedList,
+        dataSelecionada,
+        _nomeController.text,
+        double.parse(_gramasMlController.text),
+        double.parse(_kcalController.text),
+        double.parse(_carboidratosController.text),
+        double.parse(_proteinaController.text),
+        double.parse(_gorduraController.text));
 
-    refeicaoRef.set(novaRefeicao);
-    */
+    User? user = getUser();
+
+    db.collection(user!.uid).doc(id).set(novaRefeicao.toJson());
+    addRefeicaoLista(novaRefeicao);
+  }
+
+  void addRefeicaoLista(Refeicao novaRefeicao) {
+    if (novaRefeicao.tipo == 'Cafe') {
+      setState(() {
+        listaCafe.add(novaRefeicao);
+        print(novaRefeicao.tipo);
+      });
+    } else if (novaRefeicao.tipo == 'Almoco') {
+      setState(() {
+        listaAlmoco.add(novaRefeicao);
+      });
+    } else if (novaRefeicao.tipo == 'Jantar') {
+      setState(() {
+        listaJantar.add(novaRefeicao);
+      });
+    } else if (novaRefeicao.tipo == 'Outros') {
+      setState(() {
+        listaOutros.add(novaRefeicao);
+      });
+    }
+  }
+
+  void removerRefeicaoBD(Refeicao refeicao) {
+    User? user = getUser();
+    FirebaseFirestore.instance.collection(user!.uid).doc(refeicao.id).delete();
+  }
+
+  void buscarRefeicoes() async {
+    refeicoes.clear();
+    listaCafe.clear();
+    listaAlmoco.clear();
+    listaJantar.clear();
+    listaOutros.clear();
+    User? user = getUser();
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection(user!.uid)
+          .where('data', isEqualTo: dataSelecionada)
+          .get();
+
+      querySnapshot.docs.forEach((doc) {
+        Refeicao refeicao = Refeicao.fromFirestore(doc);
+        refeicoes.add(refeicao);
+      });
+    } catch (e) {}
+    atualizarLista();
+  }
+
+  void atualizarLista() {
+    for (Refeicao refeicao in refeicoes) {
+      addRefeicaoLista(refeicao);
+    }
   }
 }
