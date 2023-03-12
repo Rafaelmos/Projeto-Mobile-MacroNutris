@@ -412,6 +412,15 @@ class _HomePageState extends State<HomePage> {
     return user;
   }
 
+  String converterParaDecimal(decimal) {
+    if (decimal.contains(',')) {
+      decimal = decimal.replaceAll(',', '.');
+      return decimal;
+    } else {
+      return decimal;
+    }
+  }
+
   void addRefeicaoBD(selectedList) {
     String id = Uuid().v1();
     Refeicao novaRefeicao = Refeicao.novaRefeicao(
@@ -419,11 +428,11 @@ class _HomePageState extends State<HomePage> {
         selectedList,
         dataSelecionada,
         _nomeController.text,
-        double.parse(_gramasMlController.text),
-        double.parse(_kcalController.text),
-        double.parse(_carboidratosController.text),
-        double.parse(_proteinaController.text),
-        double.parse(_gorduraController.text));
+        double.parse(converterParaDecimal(_gramasMlController.text)),
+        double.parse(converterParaDecimal(_kcalController.text)),
+        double.parse(converterParaDecimal(_carboidratosController.text)),
+        double.parse(converterParaDecimal(_proteinaController.text)),
+        double.parse(converterParaDecimal(_gorduraController.text)));
 
     User? user = getUser();
 
@@ -464,11 +473,11 @@ class _HomePageState extends State<HomePage> {
         selectedList,
         dataSelecionada,
         _nomeController.text,
-        double.parse(_gramasMlController.text),
-        double.parse(_kcalController.text),
-        double.parse(_carboidratosController.text),
-        double.parse(_proteinaController.text),
-        double.parse(_gorduraController.text));
+        double.parse(converterParaDecimal(_gramasMlController.text)),
+        double.parse(converterParaDecimal(_kcalController.text)),
+        double.parse(converterParaDecimal(_carboidratosController.text)),
+        double.parse(converterParaDecimal(_proteinaController.text)),
+        double.parse(converterParaDecimal(_gorduraController.text)));
 
     final dataMap = refeicaoAtualizada.toJson();
 

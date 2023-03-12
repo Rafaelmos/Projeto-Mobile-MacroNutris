@@ -33,7 +33,7 @@ class _RelatoriosState extends State<Relatorios> {
             ListTile(
               dense: true,
               title: const Text('Refeições'),
-              trailing: const Icon(Icons.analytics_outlined),
+              trailing: const Icon(Icons.room_service),
               onTap: () {
                 home_page();
               },

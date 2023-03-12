@@ -41,7 +41,7 @@ class _InformacoesState extends State<Informacoes> {
             ListTile(
               dense: true,
               title: const Text('Refeições'),
-              trailing: const Icon(Icons.analytics_outlined),
+              trailing: const Icon(Icons.room_service),
               onTap: () {
                 home_page();
               },
@@ -166,12 +166,19 @@ class _InformacoesState extends State<Informacoes> {
     return imc;
   }
 
+  String converterParaDecimal(decimal) {
+    if (decimal.contains(',')) {
+      decimal = decimal.replaceAll(',', '.');
+      return decimal;
+    } else {
+      return decimal;
+    }
+  }
+
   void addInformacao() {
     String id = Uuid().v1();
-
-    double peso = double.parse(_peso.text);
-
-    double altura = double.parse(_altura.text);
+    double peso = double.parse(converterParaDecimal(_peso.text));
+    double altura = double.parse(converterParaDecimal(_altura.text));
 
     Informacao informacoes = Informacao.novaInformacao(
       id,
