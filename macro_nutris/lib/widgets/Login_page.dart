@@ -88,8 +88,6 @@ class _LoginState extends State<Login> {
                 child: MaterialButton(
                   onPressed: () {
                     login();
-                    //print(_emailController.text);
-                    //print(_passwordController.text);
                   },
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),

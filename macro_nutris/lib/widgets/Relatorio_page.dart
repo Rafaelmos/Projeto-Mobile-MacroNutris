@@ -17,6 +17,12 @@ class _RelatoriosState extends State<Relatorios> {
   String email = '';
 
   @override
+  void initState() {
+    super.initState();
+    exibirUsuario();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
