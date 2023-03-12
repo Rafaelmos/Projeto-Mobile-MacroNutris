@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:macro_nutris/widgets/Informacao_page.dart';
 import 'package:macro_nutris/widgets/Relatorio_page.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,6 +58,14 @@ class _HomePageState extends State<HomePage> {
               trailing: const Icon(Icons.analytics_outlined),
               onTap: () {
                 relatorio_page();
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: const Text('Informações'),
+              trailing: const Icon(Icons.info_outline),
+              onTap: () {
+                informacoes_page();
               },
             ),
             ListTile(
@@ -372,6 +381,11 @@ class _HomePageState extends State<HomePage> {
   relatorio_page() async {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Relatorios()));
+  }
+
+  informacoes_page() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Informacoes()));
   }
 
   Future<void> selecionarData() async {

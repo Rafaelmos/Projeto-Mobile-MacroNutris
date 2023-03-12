@@ -22,7 +22,7 @@ class Refeicao {
     required this.proteina,
     required this.gordura,
   });
-  
+
   static Refeicao novaRefeicao(
       id, tipo, data, nome, gramasMl, kcal, carbo, prote, gord) {
     Refeicao novaRefeicao = Refeicao(
@@ -52,8 +52,8 @@ class Refeicao {
       'gordura': gordura.toDouble(),
     };
   }
-  
-    factory Refeicao.fromFirestore(DocumentSnapshot doc) {
+
+  factory Refeicao.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Refeicao(
       id: data['id'],
@@ -67,7 +67,4 @@ class Refeicao {
       gordura: data['gordura'].toDouble(),
     );
   }
-
- 
-  
 }

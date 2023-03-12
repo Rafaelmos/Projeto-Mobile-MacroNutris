@@ -28,8 +28,15 @@ class _RelatoriosState extends State<Relatorios> {
               title: const Text('Refeições'),
               trailing: const Icon(Icons.analytics_outlined),
               onTap: () {
-                
                 home_page();
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: const Text('Informações'),
+              trailing: const Icon(Icons.info_outline),
+              onTap: () {
+                // informações sobre usaurio
               },
             ),
             ListTile(
@@ -45,7 +52,6 @@ class _RelatoriosState extends State<Relatorios> {
       ),
       appBar: AppBar(
         centerTitle: true,
-      
       ),
       body: Center(
         child: Text(
