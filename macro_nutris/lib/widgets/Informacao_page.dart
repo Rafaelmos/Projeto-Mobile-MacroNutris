@@ -5,6 +5,7 @@ import 'Checagem_page.dart';
 import 'package:macro_nutris/widgets/Relatorio_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:macro_nutris/widgets/ObjetoInformacao.dart';
+import 'package:uuid/uuid.dart';
 
 class Informacoes extends StatefulWidget {
   const Informacoes({super.key});
@@ -98,11 +99,10 @@ class _InformacoesState extends State<Informacoes> {
             TextFormField(
               controller: _peso,
               autofocus: true,
-              obscureText: true,
               keyboardType: TextInputType.text,
               keyboardAppearance: Brightness.dark,
-              style: TextStyle(color: Colors.black, fontSize: 20),
               textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black, fontSize: 20),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: "Peso",
@@ -134,7 +134,7 @@ class _InformacoesState extends State<Informacoes> {
               height: 50,
               child: MaterialButton(
                 onPressed: () {
-                  // botao
+                  addInformacao();
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
@@ -161,24 +161,30 @@ class _InformacoesState extends State<Informacoes> {
     }
   }
 
-  calcular() {
-    // peso  / (altura )**2
+  calcular(peso, altura) {
+    double imc = peso / (altura * altura);
+    return imc;
   }
 
   void addInformacao() {
-    String id = 'informacao';
+    String id = Uuid().v1();
 
-    Informacoes informacoes = Informacoes(
+    double peso = double.parse(_peso.text);
+
+    double altura = double.parse(_altura.text);
+
+    Informacao informacoes = Informacao.novaInformacao(
       id,
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
       int.parse(_idade.text),
-      double.parse(_peso.text),
-      double.parse(_altura.text),
-      double.parse(_imc.text),
+      peso,
+      altura,
+      calcular(peso, altura),
     );
 
     User? user = getUser();
 
-    db.collection(user!.uid).doc(id).set(informacoes.toJson());
+    db.collection(email).doc(id).set(informacoes.toJson());
   }
 
   sair() async {

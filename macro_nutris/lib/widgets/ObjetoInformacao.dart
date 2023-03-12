@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Informacoes {
+class Informacao {
   String id;
   DateTime data;
   int idade;
@@ -8,7 +8,7 @@ class Informacoes {
   double altura;
   double imc;
 
-  Informacoes({
+  Informacao({
     required this.id,
     required this.data,
     required this.idade,
@@ -17,8 +17,8 @@ class Informacoes {
     required this.imc,
   });
 
-  static Informacoes nova_info(id, data, idade, peso, altura, imc) {
-    Informacoes nova_info = Informacoes(
+  static Informacao novaInformacao(id, data, idade, peso, altura, imc) {
+    Informacao novaInformacao = Informacao(
       id: id,
       data: data,
       idade: idade,
@@ -26,7 +26,7 @@ class Informacoes {
       altura: altura,
       imc: imc,
     );
-    return nova_info;
+    return novaInformacao;
   }
 
   Map<String, dynamic> toJson() {
@@ -40,9 +40,9 @@ class Informacoes {
     };
   }
 
-  factory Informacoes.fromFirestore(DocumentSnapshot doc) {
+  factory Informacao.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Informacoes(
+    return Informacao(
       id: data['id'],
       data: (data['data'] as Timestamp).toDate(),
       idade: data['idade'].toInt(),
