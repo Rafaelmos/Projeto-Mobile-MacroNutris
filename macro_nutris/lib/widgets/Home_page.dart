@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:macro_nutris/widgets/Relatorio_page.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,14 @@ class _HomePageState extends State<HomePage> {
           children: [
             UserAccountsDrawerHeader(
                 accountName: Text(nome), accountEmail: Text(email)),
+            ListTile(
+              dense: true,
+              title: const Text('Relatórios'),
+              trailing: const Icon(Icons.analytics_outlined),
+              onTap: () {
+                relatorio_page();
+              },
+            ),
             ListTile(
               dense: true,
               title: const Text('Sair'),
@@ -232,7 +241,101 @@ class _HomePageState extends State<HomePage> {
                       child: IconButton(
                         icon: Icon(Icons.edit, color: Colors.blue),
                         onPressed: () {
-                          // Navegar para a tela de edição
+                          String selectedList = 'Cafe'; // valor padrão
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Nova Refeição'),
+                                content: SingleChildScrollView(
+                                  child: Form(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        TextFormField(
+                                          controller: _nomeController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Nome',
+                                          ),
+                                        ),
+                                        TextFormField(
+                                          controller: _gramasMlController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Gramas/Ml',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                        TextFormField(
+                                          controller: _kcalController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Kcal',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                        TextFormField(
+                                          controller: _carboidratosController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Carboidratos',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                        TextFormField(
+                                          controller: _proteinaController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Proteína',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                        TextFormField(
+                                          controller: _gorduraController,
+                                          decoration: const InputDecoration(
+                                            labelText: 'Gordura',
+                                          ),
+                                          keyboardType: TextInputType.number,
+                                        ),
+                                        DropdownButton<String>(
+                                          value: selectedList,
+                                          onChanged: (String? value) {
+                                            setState(() {
+                                              selectedList = value!;
+                                            });
+                                          },
+                                          items: <String>[
+                                            'Cafe',
+                                            'Almoco',
+                                            'Jantar',
+                                            'Outros'
+                                          ].map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      atualizarRefeicaoBD(
+                                          refeicao, selectedList);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Atualizar'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancelar'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                       ),
                     ),
@@ -264,6 +367,11 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         );
+  }
+
+  relatorio_page() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Relatorios()));
   }
 
   Future<void> selecionarData() async {
@@ -331,7 +439,30 @@ class _HomePageState extends State<HomePage> {
 
   void removerRefeicaoBD(Refeicao refeicao) {
     User? user = getUser();
-    FirebaseFirestore.instance.collection(user!.uid).doc(refeicao.id).delete();
+    db.collection(user!.uid).doc(refeicao.id).delete();
+  }
+
+  void atualizarRefeicaoBD(Refeicao refeicao, selectedList) {
+    User? user = getUser();
+    final DocumentReference docRef = db.collection(user!.uid).doc(refeicao.id);
+    Refeicao refeicaoAtualizada = Refeicao.novaRefeicao(
+        refeicao.id,
+        selectedList,
+        dataSelecionada,
+        _nomeController.text,
+        double.parse(_gramasMlController.text),
+        double.parse(_kcalController.text),
+        double.parse(_carboidratosController.text),
+        double.parse(_proteinaController.text),
+        double.parse(_gorduraController.text));
+
+    final dataMap = refeicaoAtualizada.toJson();
+
+    docRef
+        .update(dataMap)
+        .then((value) => print('Refeição atualizada com sucesso!'))
+        .catchError((error) => print('Erro ao atualizar refeição: $error'));
+    buscarRefeicoes();
   }
 
   void buscarRefeicoes() async {
@@ -342,7 +473,7 @@ class _HomePageState extends State<HomePage> {
     listaOutros.clear();
     User? user = getUser();
     try {
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      QuerySnapshot querySnapshot = await db
           .collection(user!.uid)
           .where('data', isEqualTo: dataSelecionada)
           .get();
