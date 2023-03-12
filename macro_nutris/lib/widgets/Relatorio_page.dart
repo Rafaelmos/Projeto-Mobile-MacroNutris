@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
+import 'package:macro_nutris/widgets/Informacao_page.dart';
 import 'Checagem_page.dart';
 
 class Relatorios extends StatefulWidget {
@@ -36,7 +37,7 @@ class _RelatoriosState extends State<Relatorios> {
               title: const Text('Informações'),
               trailing: const Icon(Icons.info_outline),
               onTap: () {
-                // informações sobre usaurio
+                informacoes_page();
               },
             ),
             ListTile(
@@ -89,6 +90,11 @@ class _RelatoriosState extends State<Relatorios> {
   home_page() async {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const HomePage()));
+  }
+
+  informacoes_page() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Informacoes()));
   }
 
   User? getUser() {

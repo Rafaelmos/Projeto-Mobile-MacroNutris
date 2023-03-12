@@ -21,85 +21,87 @@ class _InformacoesState extends State<Informacoes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              UserAccountsDrawerHeader(
-                  accountName: Text(nome), accountEmail: Text(email)),
-              ListTile(
-                dense: true,
-                title: const Text('Refeições'),
-                trailing: const Icon(Icons.analytics_outlined),
-                onTap: () {
-                  home_page();
-                },
-              ),
-              ListTile(
-                dense: true,
-                title: const Text('Relatórios'),
-                trailing: const Icon(Icons.analytics_outlined),
-                onTap: () {
-                  relatorio_page();
-                },
-              ),
-              ListTile(
-                dense: true,
-                title: const Text('Sair'),
-                trailing: const Icon(Icons.exit_to_app),
-                onTap: () {
-                  sair();
-                },
-              ),
-            ],
-          ),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            UserAccountsDrawerHeader(
+                accountName: Text(nome), accountEmail: Text(email)),
+            ListTile(
+              dense: true,
+              title: const Text('Refeições'),
+              trailing: const Icon(Icons.analytics_outlined),
+              onTap: () {
+                home_page();
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: const Text('Relatórios'),
+              trailing: const Icon(Icons.analytics_outlined),
+              onTap: () {
+                relatorio_page();
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: const Text('Sair'),
+              trailing: const Icon(Icons.exit_to_app),
+              onTap: () {
+                sair();
+              },
+            ),
+          ],
         ),
-        appBar: AppBar(
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Center(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 10,
+      ),
+      appBar: AppBar(
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(100),
+        child: Center(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _peso,
+              autofocus: true,
+              keyboardType: TextInputType.text,
+              keyboardAppearance: Brightness.dark,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black, fontSize: 20),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: "Peso",
+                labelStyle: TextStyle(color: Colors.black),
+                alignLabelWithHint: true,
               ),
-              TextFormField(
-                controller: _peso,
-                autofocus: true,
-                keyboardType: TextInputType.text,
-                keyboardAppearance: Brightness.dark,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black, fontSize: 20),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Peso",
-                  labelStyle: TextStyle(color: Colors.black),
-                  alignLabelWithHint: true,
-                ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _altura,
+              autofocus: true,
+              obscureText: true,
+              keyboardType: TextInputType.text,
+              keyboardAppearance: Brightness.dark,
+              style: TextStyle(color: Colors.black, fontSize: 20),
+              textAlign: TextAlign.center,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: "Altura",
+                labelStyle: TextStyle(color: Colors.black),
+                alignLabelWithHint: true,
               ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _altura,
-                autofocus: true,
-                obscureText: true,
-                keyboardType: TextInputType.text,
-                keyboardAppearance: Brightness.dark,
-                style: TextStyle(color: Colors.black, fontSize: 20),
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Altura",
-                  labelStyle: TextStyle(color: Colors.black),
-                  alignLabelWithHint: true,
-                ),
-              )
-            ],
-          )),
-        ));
+            )
+          ],
+        )),
+      ),
+    );
   }
 
   exibirUsuario() async {
@@ -110,6 +112,10 @@ class _InformacoesState extends State<Informacoes> {
         email = usuario.email!;
       });
     }
+  }
+
+  calcular() {
+    // peso  / (altura )**2
   }
 
   sair() async {
