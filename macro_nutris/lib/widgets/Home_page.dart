@@ -313,7 +313,6 @@ class _HomePageState extends State<HomePage> {
     if (novaRefeicao.tipo == 'Cafe') {
       setState(() {
         listaCafe.add(novaRefeicao);
-        print(novaRefeicao.tipo);
       });
     } else if (novaRefeicao.tipo == 'Almoco') {
       setState(() {
