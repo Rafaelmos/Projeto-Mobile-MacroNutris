@@ -1,26 +1,27 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
-import 'package:macro_nutris/widgets/meta_page.dart';
 import 'Checagem_page.dart';
 import 'package:macro_nutris/widgets/Relatorio_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:macro_nutris/widgets/ObjetoInformacao.dart';
 import 'package:uuid/uuid.dart';
 
-class Informacoes extends StatefulWidget {
-  const Informacoes({super.key});
+import 'Informacao_page.dart';
+import 'ObjetoMeta.dart';
+
+class Metas extends StatefulWidget {
+  const Metas({super.key});
 
   @override
-  State<Informacoes> createState() => _InformacoesState();
+  State<Metas> createState() => _MetasState();
 }
 
-class _InformacoesState extends State<Informacoes> {
+class _MetasState extends State<Metas> {
   final _firebaseAuth = FirebaseAuth.instance;
-  TextEditingController _altura = TextEditingController();
-  TextEditingController _peso = TextEditingController();
-  TextEditingController _idade = TextEditingController();
-  TextEditingController _imc = TextEditingController();
+  TextEditingController _kcal = TextEditingController();
+  TextEditingController _proteinas = TextEditingController();
+  TextEditingController _carboidratos = TextEditingController();
+  TextEditingController _gordura = TextEditingController();
   FirebaseFirestore db = FirebaseFirestore.instance;
   String nome = '';
   String email = '';
@@ -41,10 +42,10 @@ class _InformacoesState extends State<Informacoes> {
                 accountName: Text(nome), accountEmail: Text(email)),
             ListTile(
               dense: true,
-              title: const Text('Metas'),
-              trailing: const Icon(Icons.g_mobiledata),
+              title: const Text('Informações'),
+              trailing: const Icon(Icons.info_outline),
               onTap: () {
-                meta_page();
+                informacoes_page();
               },
             ),
             ListTile(
@@ -76,7 +77,7 @@ class _InformacoesState extends State<Informacoes> {
       ),
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Informações'),
+        title: const Text('Metas'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(100),
@@ -89,7 +90,7 @@ class _InformacoesState extends State<Informacoes> {
               height: 2,
             ),
             TextFormField(
-              controller: _idade,
+              controller: _kcal,
               autofocus: true,
               keyboardType: TextInputType.text,
               keyboardAppearance: Brightness.dark,
@@ -97,7 +98,7 @@ class _InformacoesState extends State<Informacoes> {
               style: TextStyle(color: Colors.black, fontSize: 20),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "Idade",
+                hintText: "Calorias",
                 labelStyle: TextStyle(color: Colors.black),
                 alignLabelWithHint: true,
               ),
@@ -106,7 +107,7 @@ class _InformacoesState extends State<Informacoes> {
               height: 10,
             ),
             TextFormField(
-              controller: _peso,
+              controller: _carboidratos,
               autofocus: true,
               keyboardType: TextInputType.text,
               keyboardAppearance: Brightness.dark,
@@ -114,7 +115,7 @@ class _InformacoesState extends State<Informacoes> {
               style: TextStyle(color: Colors.black, fontSize: 20),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "Peso",
+                hintText: "Carboidratos",
                 labelStyle: TextStyle(color: Colors.black),
                 alignLabelWithHint: true,
               ),
@@ -123,7 +124,7 @@ class _InformacoesState extends State<Informacoes> {
               height: 10,
             ),
             TextFormField(
-              controller: _altura,
+              controller: _proteinas,
               autofocus: true,
               keyboardType: TextInputType.text,
               keyboardAppearance: Brightness.dark,
@@ -131,7 +132,24 @@ class _InformacoesState extends State<Informacoes> {
               style: TextStyle(color: Colors.black, fontSize: 20),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "Altura",
+                hintText: "Gordura",
+                labelStyle: TextStyle(color: Colors.black),
+                alignLabelWithHint: true,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: _gordura,
+              autofocus: true,
+              keyboardType: TextInputType.text,
+              keyboardAppearance: Brightness.dark,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black, fontSize: 20),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: "Godura",
                 labelStyle: TextStyle(color: Colors.black),
                 alignLabelWithHint: true,
               ),
@@ -143,7 +161,7 @@ class _InformacoesState extends State<Informacoes> {
               height: 50,
               child: MaterialButton(
                 onPressed: () {
-                  addInformacao();
+                  definirMeta();
                 },
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
@@ -170,11 +188,6 @@ class _InformacoesState extends State<Informacoes> {
     }
   }
 
-  calcular(peso, altura) {
-    double imc = peso / (altura * altura);
-    return imc;
-  }
-
   String converterParaDecimal(decimal) {
     if (decimal.contains(',')) {
       decimal = decimal.replaceAll(',', '.');
@@ -184,23 +197,17 @@ class _InformacoesState extends State<Informacoes> {
     }
   }
 
-  void addInformacao() {
+  void definirMeta() {
     String id = Uuid().v1();
-    double peso = double.parse(converterParaDecimal(_peso.text));
-    double altura = double.parse(converterParaDecimal(_altura.text));
+    String user = getUser()!.uid;
+    double kcal = double.parse(converterParaDecimal(_kcal.text));
+    double carbo = double.parse(converterParaDecimal(_carboidratos.text));
+    double proteina = double.parse(converterParaDecimal(_proteinas.text));
+    double gord = double.parse(converterParaDecimal(_gordura.text));
 
-    Informacao informacoes = Informacao.novaInformacao(
-      id,
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day),
-      int.parse(_idade.text),
-      peso,
-      altura,
-      calcular(peso, altura),
-    );
+    Meta meta = Meta.novaMeta(user, kcal, carbo, proteina, gord);
 
-    User? user = getUser();
-
-    db.collection(email).doc(id).set(informacoes.toJson());
+    db.collection('Metas').doc(user).set(meta.toJson());
   }
 
   sair() async {
@@ -224,9 +231,9 @@ class _InformacoesState extends State<Informacoes> {
         context, MaterialPageRoute(builder: (context) => const Relatorios()));
   }
 
-  meta_page() async {
+  informacoes_page() async {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Metas()));
+        context, MaterialPageRoute(builder: (context) => const Informacoes()));
   }
 
   User? getUser() {

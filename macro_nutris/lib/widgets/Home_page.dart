@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:macro_nutris/widgets/Checagem_page.dart';
 import 'package:macro_nutris/widgets/ObjetoRefeicao.dart';
 
+import 'Meta_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
   @override
@@ -54,10 +56,10 @@ class _HomePageState extends State<HomePage> {
                 accountName: Text(nome), accountEmail: Text(email)),
             ListTile(
               dense: true,
-              title: const Text('Relatórios'),
-              trailing: const Icon(Icons.analytics_outlined),
+              title: const Text('Metas'),
+              trailing: const Icon(Icons.trending_up),
               onTap: () {
-                relatorio_page();
+                meta_page();
               },
             ),
             ListTile(
@@ -66,6 +68,14 @@ class _HomePageState extends State<HomePage> {
               trailing: const Icon(Icons.info_outline),
               onTap: () {
                 informacoes_page();
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: const Text('Relatórios'),
+              trailing: const Icon(Icons.analytics_outlined),
+              onTap: () {
+                relatorio_page();
               },
             ),
             ListTile(
@@ -386,6 +396,11 @@ class _HomePageState extends State<HomePage> {
   informacoes_page() async {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Informacoes()));
+  }
+
+  meta_page() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Metas()));
   }
 
   Future<void> selecionarData() async {
