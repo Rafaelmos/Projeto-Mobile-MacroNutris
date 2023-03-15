@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
+import 'package:macro_nutris/widgets/Sobre_page.dart';
 import 'Checagem_page.dart';
 import 'package:macro_nutris/widgets/Relatorio_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,6 +63,14 @@ class _MetasState extends State<Metas> {
               trailing: const Icon(Icons.room_service),
               onTap: () {
                 home_page();
+              },
+            ),
+            ListTile(
+              dense: true,
+              title: const Text('Sobre'),
+              trailing: const Icon(Icons.library_books_outlined),
+              onTap: () {
+                sobre_page();
               },
             ),
             ListTile(
@@ -234,6 +243,11 @@ class _MetasState extends State<Metas> {
   informacoes_page() async {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Informacoes()));
+  }
+
+  sobre_page() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Sobre()));
   }
 
   User? getUser() {

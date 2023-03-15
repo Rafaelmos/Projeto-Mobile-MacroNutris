@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               dense: true,
               title: const Text('Sobre'),
-              trailing: const Icon(Icons.abc_outlined),
+              trailing: const Icon(Icons.library_books_outlined),
               onTap: () {
                 sobre_page();
               },

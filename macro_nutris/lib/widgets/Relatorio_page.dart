@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
 import 'package:macro_nutris/widgets/Informacao_page.dart';
 import 'package:macro_nutris/widgets/ObjetoMeta.dart';
+import 'package:macro_nutris/widgets/Sobre_page.dart';
 import 'Checagem_page.dart';
 import 'Meta_page.dart';
 import 'ObjetoRefeicao.dart';
@@ -70,7 +71,7 @@ class _RelatoriosState extends State<Relatorios> {
             ListTile(
               dense: true,
               title: const Text('Sobre'),
-              trailing: const Icon(Icons.abc_outlined),
+              trailing: const Icon(Icons.library_books_outlined),
               onTap: () {
                 sobre_page();
               },
