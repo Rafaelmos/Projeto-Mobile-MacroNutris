@@ -82,54 +82,66 @@ class _SobreState extends State<Sobre> {
         title: const Text('Sobre'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 128,
-              height: 128,
-              child: Image.asset("assets/logo.png"),
-            ),
-            const Text(
-              "    O aplicativo de nutrição foi desenvolvido para ajudá-lo a controlar sua dieta e alcançar seus objetivos de saúde e bem-estar. Cadastre seus alimentos diários e suas quantidades em gramas e acompanhe facilmente as informações nutricionais de cada alimento, como kcal, carboidratos, proteínas e gorduras. Defina metas de ingestão diárias para cada nutriente e monitore seu progresso com nossos gráficos de fácil visualização.",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w100,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "   \n Esse programa foi desenvolvido para Disciplina de Desenvolvimento Mobile da Universidade UFRPE - UAST.",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "    Desenvolvido em 2023",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w200,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              " Feito por: \n\n Rafael José Moura \n\n Github: https://github.com/Rafaelmos \n\n Rafaéla Maria Moura \n\n Github: https://github.com/rafaela-moura",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w100,
-              ),
-            ),
-          ],
+  child: SingleChildScrollView(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 128,
+          height: 128,
+          child: Image.asset("assets/logo.png"),
         ),
-      ),
+        const Padding(
+          padding: EdgeInsets.all(20),
+          child: Text(
+            """O app de nutrição foi desenvolvido para ajudá-lo a controlar sua dieta e alcançar seus objetivos de saúde e bem-estar. Cadastre seus alimentos diários e suas quantidades em gramas e acompanhe facilmente as informações nutricionais de cada alimento, como kcal, carboidratos, proteínas e gorduras.""",
+            style: TextStyle(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.justify,
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.all(20),
+          child: Text(
+            """Defina metas de ingestão diárias para cada nutriente e monitore seu progresso com nossos gráficos de fácil visualização.""",
+            style: TextStyle(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.justify,
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.all(20),
+          child: Text(
+            """Esse programa foi desenvolvido para Disciplina de Desenvolvimento Mobile da Universidade UFRPE - UAST.""",
+            style: TextStyle(
+              fontSize: 13,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const Text(
+          "    Desenvolvido em 2023",
+          style: TextStyle(
+            fontSize: 15,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const Text(
+          " Feito por: \n Rafael José Moura \n Github: https://github.com/Rafaelmos \n Rafaéla Maria Moura \n Github: https://github.com/rafaela-moura",
+          style: TextStyle(
+            fontSize: 15,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  ),
+),
+
     );
   }
 
