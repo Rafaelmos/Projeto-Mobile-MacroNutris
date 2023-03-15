@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
 import 'package:macro_nutris/widgets/Informacao_page.dart';
-import 'package:macro_nutris/widgets/ObjetoDadosSemana.dart';
+//import 'package:macro_nutris/widgets/ObjetoDadosSemana.dart';
 import 'package:macro_nutris/widgets/ObjetoMeta.dart';
 import 'package:macro_nutris/widgets/Sobre_page.dart';
 import 'Checagem_page.dart';
@@ -42,7 +42,7 @@ class _RelatoriosState extends State<Relatorios> {
     exibirUsuario();
     buscarMeta();
     buscarRefeicoesDia();
-    buscarRefeicoesSemana();
+    //   buscarRefeicoesSemana();
   }
 
   @override
@@ -175,7 +175,7 @@ class _RelatoriosState extends State<Relatorios> {
     }
   }
 
-  gerarGraficoSemanal() {
+  /** gerarGraficoSemanal() {
     DateTime hoje =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
@@ -214,7 +214,8 @@ class _RelatoriosState extends State<Relatorios> {
       DadosSemana(data: lista6[0], dado: lista6[1]),
       DadosSemana(data: lista7[0], dado: lista7[1]),
     ];
-  }
+  } 
+  */
 
   gerarGraficoDiario() {
     setState(() {
@@ -263,7 +264,7 @@ class _RelatoriosState extends State<Relatorios> {
     } catch (e) {}
   }
 
-  void buscarRefeicoesSemana() async {
+  /**void buscarRefeicoesSemana() async {
     User? user = getUser();
     DateTime dataSubtraida = dataHoje.subtract(Duration(days: 7));
     try {
@@ -281,6 +282,7 @@ class _RelatoriosState extends State<Relatorios> {
 
     gerarGraficoSemanal();
   }
+  */
 
   sair() async {
     await _firebaseAuth.signOut().then(
