@@ -69,6 +69,14 @@ class _RelatoriosState extends State<Relatorios> {
             ),
             ListTile(
               dense: true,
+              title: const Text('Sobre'),
+              trailing: const Icon(Icons.abc_outlined),
+              onTap: () {
+                sobre_page();
+              },
+            ),
+            ListTile(
+              dense: true,
               title: const Text('Sair'),
               trailing: const Icon(Icons.exit_to_app),
               onTap: () {
@@ -93,7 +101,7 @@ class _RelatoriosState extends State<Relatorios> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            
+
             //Metas Calorias
             //Calorias Atingidas Hoje
             //Metas de MacroNutrientes
@@ -220,6 +228,11 @@ class _RelatoriosState extends State<Relatorios> {
   meta_page() async {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Metas()));
+  }
+
+  sobre_page() async {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Sobre()));
   }
 
   User? getUser() {
