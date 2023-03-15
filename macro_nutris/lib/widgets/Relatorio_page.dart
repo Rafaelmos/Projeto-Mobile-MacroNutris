@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:macro_nutris/widgets/Home_page.dart';
 import 'package:macro_nutris/widgets/Informacao_page.dart';
+import 'package:macro_nutris/widgets/ObjetoDadosSemana.dart';
 import 'package:macro_nutris/widgets/ObjetoMeta.dart';
 import 'package:macro_nutris/widgets/Sobre_page.dart';
 import 'Checagem_page.dart';
@@ -23,9 +24,17 @@ class _RelatoriosState extends State<Relatorios> {
   DateTime dataHoje =
       DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   FirebaseFirestore db = FirebaseFirestore.instance;
-  List<Refeicao> refeicoesDia = [];
-  List<Refeicao> refeicoesSemana = [];
-  List<Meta> metas = [];
+  List refeicoesDia = [];
+  List refeicoesSemana = [];
+  List metas = [];
+  double kcalDia = 0;
+  double carboDia = 0;
+  double proteinaDia = 0;
+  double gordDia = 0;
+  double kcalMeta = 0;
+  double carboMeta = 0;
+  double proteinaMeta = 0;
+  double gordMeta = 0;
 
   @override
   void initState() {
@@ -93,36 +102,63 @@ class _RelatoriosState extends State<Relatorios> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 50,
+            ),
             const Text(
-              "Relatório Diário",
+              "Relatório Diario",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
             ),
-
-            //Metas Calorias
-            //Calorias Atingidas Hoje
-            //Metas de MacroNutrientes
-            //Grafico de MacroNutrientes (DE PIZZA)
-
-            carregarGraficoDiario(),
-            const Text(
-              "Relatório Semanal",
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
+            SizedBox(
+              height: 50,
+            ),
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                """META""",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-
-            //Grafico de Calorias (DE LINHA)
-            //Grafico de Carboidratos (DE LINHA) #NAO SEI SE VALE A PENA FAZER
-            //Grafico de Proteinas (DE LINHA) #NAO SEI SE VALE A PENA FAZER
-            //Grafico de Gorduras (DE LINHA) #NAO SEI SE VALE A PENA FAZER
-
-            carregarGraficoSemanal(),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                """KCAL: $kcalMeta CARBO: $carboMeta PROT: $proteinaMeta GORD: $gordMeta""",
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                """CONSUMIDAS""",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                """KCAL: $kcalDia CARBO: $carboDia PROT: $proteinaDia GORD: $gordDia""",
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ],
         ),
       ),
@@ -159,6 +195,63 @@ class _RelatoriosState extends State<Relatorios> {
     );
   }
 
+  gerarGraficoSemanal() {
+    DateTime hoje =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+
+    List lista1 = [hoje, 0];
+    List lista2 = [hoje.subtract(Duration(days: 1)), 0];
+    List lista3 = [hoje.subtract(Duration(days: 2)), 0];
+    List lista4 = [hoje.subtract(Duration(days: 3)), 0];
+    List lista5 = [hoje.subtract(Duration(days: 4)), 0];
+    List lista6 = [hoje.subtract(Duration(days: 5)), 0];
+    List lista7 = [hoje.subtract(Duration(days: 6)), 0];
+
+    refeicoesSemana.forEach((refeicao) {
+      if (refeicao['data'] == lista1[0]) {
+        lista1[1] += refeicao['kcal'];
+      } else if (refeicao['data'] == lista2[1]) {
+        lista2[1] += refeicao['kcal'];
+      } else if (refeicao['data'] == lista3[1]) {
+        lista3[1] += refeicao['kcal'];
+      } else if (refeicao['data'] == lista4[1]) {
+        lista4[1] += refeicao['kcal'];
+      } else if (refeicao['data'] == lista5[1]) {
+        lista5[1] += refeicao['kcal'];
+      } else if (refeicao['data'] == lista6[1]) {
+        lista6[1] += refeicao['kcal'];
+      } else if (refeicao['data'] == lista7[1]) {
+        lista7[1] += refeicao['kcal'];
+      }
+    });
+
+    List kcalSemanal = [
+      DadosSemana(data: lista1[0], dado: lista1[1]),
+      DadosSemana(data: lista2[0], dado: lista2[1]),
+      DadosSemana(data: lista3[0], dado: lista3[1]),
+      DadosSemana(data: lista4[0], dado: lista4[1]),
+      DadosSemana(data: lista5[0], dado: lista5[1]),
+      DadosSemana(data: lista6[0], dado: lista6[1]),
+      DadosSemana(data: lista7[0], dado: lista7[1]),
+    ];
+  }
+
+  gerarGraficoDiario() {
+    setState(() {
+      refeicoesDia.forEach((refeicao) {
+        kcalDia += refeicao['kcal'];
+        carboDia += refeicao['carboidratos'];
+        proteinaDia += refeicao['proteina'];
+        gordDia += refeicao['gordura'];
+      });
+
+      kcalMeta = metas[0]['kcal'];
+      carboMeta = metas[0]['carboidratos'];
+      proteinaMeta = metas[0]['proteina'];
+      gordMeta = metas[0]['gordura'];
+    });
+  }
+
   void buscarRefeicoesDia() async {
     User? user = getUser();
     try {
@@ -169,9 +262,11 @@ class _RelatoriosState extends State<Relatorios> {
 
       querySnapshot.docs.forEach((doc) {
         Refeicao refeicao = Refeicao.fromFirestore(doc);
-        refeicoesDia.add(refeicao);
+        refeicoesDia.add(refeicao.toJson());
       });
     } catch (e) {}
+
+    gerarGraficoDiario();
   }
 
   void buscarMeta() async {
@@ -183,7 +278,7 @@ class _RelatoriosState extends State<Relatorios> {
 
       querySnapshot.docs.forEach((doc) {
         Meta meta = Meta.fromFirestore(doc);
-        metas.add(meta);
+        metas.add(meta.toJson());
       });
     } catch (e) {}
   }
@@ -200,9 +295,11 @@ class _RelatoriosState extends State<Relatorios> {
 
       querySnapshot.docs.forEach((doc) {
         Refeicao refeicao = Refeicao.fromFirestore(doc);
-        refeicoesSemana.add(refeicao);
+        refeicoesSemana.add(refeicao.toJson());
       });
     } catch (e) {}
+
+    gerarGraficoSemanal();
   }
 
   sair() async {
