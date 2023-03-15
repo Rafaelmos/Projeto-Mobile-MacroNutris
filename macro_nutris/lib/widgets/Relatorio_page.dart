@@ -175,26 +175,6 @@ class _RelatoriosState extends State<Relatorios> {
     }
   }
 
-  carregarGraficoDiario() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 200,
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
-  carregarGraficoSemanal() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: 200,
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
   gerarGraficoSemanal() {
     DateTime hoje =
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
