@@ -16,6 +16,6 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
  - UFRPE (UAST) - Serra Talhada.
  - Professor: Heldon José Oliveira.
 
- ## <img src="https://cdn-icons-png.flaticon.com/512/4007/4007698.png" width="20px"> Download:
+ <!--## <img src="https://cdn-icons-png.flaticon.com/512/4007/4007698.png" width="20px"> Download:
 
-</p><a href="LinkDownload" target="_blank">BAIXAR</a> 
+</p><a href="LinkDownload" target="_blank">BAIXAR</a> -->
