@@ -11,11 +11,15 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
  - Flutter <img src="https://cdn.icon-icons.com/icons2/2107/PNG/512/file_type_flutter_icon_130599.png" width="20px">
  - Firebase <img src="https://avatars.githubusercontent.com/u/1335026?s=200&v=4" width="20px">
 
+## 📱 Telas:
+
+[Ver Telas](imgs/img.md)
+
 ## 🎓 Curso:
  - Bacharelado em Sistemas de Informação.
  - UFRPE (UAST) - Serra Talhada.
  - Professor: Heldon José Oliveira.
 
- <!--## <img src="https://cdn-icons-png.flaticon.com/512/4007/4007698.png" width="20px"> Download:
+## <img src="https://cdn-icons-png.flaticon.com/512/4007/4007698.png" width="20px"> Download:
 
-</p><a href="LinkDownload" target="_blank">BAIXAR</a> -->
+</p><a href="https://www.mediafire.com/file/qdfce3fql41htn3/macronutris.apk/file" target="_blank">BAIXAR</a>
